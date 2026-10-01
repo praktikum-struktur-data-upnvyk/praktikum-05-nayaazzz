@@ -108,31 +108,46 @@ void clear(Stack& s) {
 
 // SOAL 4
 bool kurungSeimbang(const string& ekspresi) {
-    Stack tumpukan;
-    inisialisasi(tumpukan);
-    bool seimbang = true;
+    Stack s;
+    inisialisasi(s);
 
-    for (size_t i = 0; i < ekspresi.size() && seimbang; ++i) {
-        char c = ekspresi[i];
-        if (c == '(' || c == '[' || c == '{') {
-            if (!push(tumpukan, (int)c)) seimbang = false;
-        } else if (c == ')' || c == ']' || c == '}') {
-            int atas = 0;
-            if (!pop(tumpukan, atas)) {
-                seimbang = false;   
-            } else {
-                char buka = (char)atas;
-                if ((c == ')' && buka != '(') ||
-                    (c == ']' && buka != '[') ||
-                    (c == '}' && buka != '{')) {
-                    seimbang = false;   
-                }
+    for (char karakter : ekspresi) {
+        if (karakter == '(') {
+            push(s, '(');
+        }else if (karakter == '[') {
+             push(s, '[');
+        }else if (karakter == '{') {
+            push(s, '{');
+        }else if (karakter == ')' || 
+                 karakter == ']' || 
+                 karakter == '}') {
+
+        int nilai;
+        if (!pop(s, nilai)) {
+                return false;
+            }
+
+            if (karakter == ')' && nilai != '(') {
+                clear(s);
+                return false;
+            }
+
+            if (karakter == ']' && nilai != '[') {
+                clear(s);
+                return false;
+ }
+
+            if (karakter == '}' && nilai != '{') {
+                clear(s);
+                return false;
             }
         }
     }
 
-    if (!isEmpty(tumpukan)) seimbang = false;  
-    clear(tumpukan);
+    bool seimbang = isEmpty(s);
+
+    clear(s);
+
     return seimbang;
 }
 
